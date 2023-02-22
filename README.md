@@ -1,2 +1,2 @@
-# online-library-api
-.NET API Online Library
+# bookstore-API
+.NET API Bookstore
