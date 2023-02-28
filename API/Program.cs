@@ -1,6 +1,7 @@
 using API;
 using Application;
 using Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+using (var services = app.Services.CreateScope())
+{
+    var context = services.ServiceProvider.GetService<DataContext>();
+    context.Database.MigrateAsync();
 }
 
 app.UseHttpsRedirection();
