@@ -3,6 +3,7 @@ using Application;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Persistence.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +34,8 @@ if (app.Environment.IsDevelopment())
 using (var services = app.Services.CreateScope())
 {
     var context = services.ServiceProvider.GetService<DataContext>();
-    context.Database.MigrateAsync();
+    services.ServiceProvider.GetRequiredService<IDbInitializer>().Initilize();
+
 }
 
 app.UseHttpsRedirection();
