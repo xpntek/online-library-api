@@ -10,6 +10,10 @@ public class MappingProfiles : Profile
     {
         CreateMap<ApplicationUser, UserDto>();
         CreateMap<Author,AuthorDto>();
+        CreateMap<Book,BookDto>();
+        CreateMap<Category,CategoryDto>();
+        CreateMap<Favorite,FavoriteDto>();
+        
     }
     
 }

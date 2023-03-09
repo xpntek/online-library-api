@@ -1,6 +1,8 @@
-﻿using Application.Errors;
+﻿using Application.Dtos;
+using Application.Errors;
 using Application.Features.Categories.Specification;
 using Application.Interfaces;
+using AutoMapper;
 using Domain;
 using FluentResults;
 using MediatR;
@@ -9,22 +11,24 @@ namespace Application.Features.Categories;
 
 public class UpdateCategory
 {
-    public class UpdateCategoryCommand : IRequest<Result<Category>>
+    public class UpdateCategoryCommand : IRequest<Result<CategoryDto>>
     {
         public int Id { get; set; }
         public string Description { get; set; }
     }
 
-    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Result<Category>>
+    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Result<CategoryDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public UpdateCategoryCommandHandler(IUnitOfWork unitOfWork)
+        public UpdateCategoryCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<Result<Category>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Result<CategoryDto>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
             var category = await _unitOfWork.Repository<Category>().GetByIdAsync(request.Id);
             if (category is null)
@@ -42,7 +46,7 @@ public class UpdateCategory
                 return Results.InternalError(request.Description + " don't update");
             }
 
-            return category;
+            return _mapper.Map<CategoryDto>(category);
         }
     }
 }

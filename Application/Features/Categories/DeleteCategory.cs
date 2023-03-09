@@ -1,5 +1,7 @@
-﻿using Application.Errors;
+﻿using Application.Dtos;
+using Application.Errors;
 using Application.Interfaces;
+using AutoMapper;
 using Domain;
 using FluentResults;
 using MediatR;
@@ -8,22 +10,23 @@ namespace Application.Features.Categories;
 
 public class DeleteCategory
 {
-    public class DeleteCategoryCommand : IRequest<Result<Category>>
+    public class DeleteCategoryCommand : IRequest<Result<CategoryDto>>
     {
         public int Id { get; set; }
     }
 
-    public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, Result<Category>>
+    public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, Result<CategoryDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public DeleteCategoryCommandHandler(IUnitOfWork unitOfWork)
+        public DeleteCategoryCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
-        
+            _mapper = mapper;
         }
 
-        public async Task<Result<Category>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Result<CategoryDto>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
             var category = await _unitOfWork.Repository<Category>().GetByIdAsync(request.Id);
             if (category is null)
@@ -38,7 +41,7 @@ public class DeleteCategory
                 return Results.InternalError(request.Id + " don't delete");
             }
 
-            return category;
+            return _mapper.Map<CategoryDto>(category);
         }
     }
 }

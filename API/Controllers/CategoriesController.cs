@@ -1,4 +1,5 @@
-﻿using Application.Features.Books;
+﻿using Application.Dtos;
+using Application.Features.Books;
 using Application.Features.Categories;
 using Domain;
 using FluentResults;
@@ -17,38 +18,38 @@ public class CategoriesController : BaseApiController
     }
 
     [HttpPost]
-    public Task<Result<Category>> SaveCategory(CreateCategory.CreateCategoryCommand command)
+    public Task<Result<CategoryDto>> SaveCategory(CreateCategory.CreateCategoryCommand command)
     {
         return _mediator.Send(command);
     }
     
     [HttpGet]
-    public Task<Result<List<Category>>> ListCategory()
+    public Task<Result<List<CategoryDto>>> ListCategory()
     {
         return _mediator.Send(new ListCategory.ListCategoryQuery());
     }
     
     [HttpGet("{id}")]
-    public Task<Result<Category>> ListCategoryById(int id)
+    public Task<Result<CategoryDto>> ListCategoryById(int id)
     {
         return _mediator.Send(new ListCategoryById.ListCategoryByIdQuery{Id = id});
     }
     
     [HttpGet("description/{description}")]
-    public Task<Result<Category>> ListCategoryByDescription(string description)
+    public Task<Result<CategoryDto>> ListCategoryByDescription(string description)
     {
         return _mediator.Send(new ListCategoryByDescription.ListCategoryByDescriptionQuery{Description = description});
     }
     
     [HttpPut("{id}")]
-    public Task<Result<Category>> UpdateCategory(int id, UpdateCategory.UpdateCategoryCommand command)
+    public Task<Result<CategoryDto>> UpdateCategory(int id, UpdateCategory.UpdateCategoryCommand command)
     {
         command.Id = id;
         return _mediator.Send(command);
     }
     
     [HttpDelete("{id}")]
-    public Task<Result<Category>> DeleteCategory(int id)
+    public Task<Result<CategoryDto>> DeleteCategory(int id)
     {
         return _mediator.Send(new DeleteCategory.DeleteCategoryCommand{Id =id });
     }

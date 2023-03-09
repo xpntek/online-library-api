@@ -1,4 +1,5 @@
-﻿using Application.Errors;
+﻿using Application.Dtos;
+using Application.Errors;
 using Application.Features.Categories.Specification;
 using Application.Interfaces;
 using AutoMapper;
@@ -10,22 +11,23 @@ namespace Application.Features.Categories;
 
 public class CreateCategory
 {
-    public class CreateCategoryCommand : IRequest<Result<Category>>
+    public class CreateCategoryCommand : IRequest<Result<CategoryDto>>
     {
         public string Description { get; set; }
     }
 
-    public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, Result<Category>>
+    public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, Result<CategoryDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public CreateCategoryCommandHandler(IUnitOfWork unitOfWork)
+        public CreateCategoryCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
-        
+            _mapper = mapper;
         }
 
-        public async Task<Result<Category>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Result<CategoryDto>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
             var categorySpec = new FoundCategoryByDescriptionSpecification(request.Description);
             var category = await _unitOfWork.Repository<Category>().GetEntityWithSpec(categorySpec);
@@ -46,7 +48,7 @@ public class CreateCategory
                 return Results.InternalError(request.Description + " not save");
             }
 
-            return newCategory;
+            return _mapper.Map<CategoryDto>(newCategory);
             
         }
     }
