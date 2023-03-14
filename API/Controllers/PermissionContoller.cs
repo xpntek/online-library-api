@@ -16,9 +16,28 @@ public class PermissionContoller : BaseApiController
     }
     
     [HttpPost]
-    public async Task<Result<Permission>> SaveBookAuthor(CreatePermission.CreatePermissionCommand command)
+    public async Task<Result<Permission>> CreatePermission(CreatePermission.CreatePermissionCommand command)
     {
         return await _mediator.Send(command);
     }
-    
+
+    [HttpDelete("{id}")]
+    public async Task<Result<Permission>> DeletePermission(int id)
+    {
+        return await _mediator.Send(new DeletePermission.DeletePermissionCommand { Id = id });
+    }
+
+    [HttpGet]
+    public async Task<List<Permission>> ListPermission()
+    {
+        return await _mediator.Send(new ListPermission.ListPermissionQuery());
+    }
+
+    [HttpPut("{id}")]
+    public async Task<Result<Permission>> UpdatePermission(UpdatePermission.UpdatePermissionCommand command, int id)
+    {
+        command.Id = id;
+
+        return await _mediator.Send(command);
+    }
 }

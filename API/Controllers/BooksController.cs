@@ -40,7 +40,6 @@ public class BooksController : BaseApiController
         return await _mediator.Send(command);
     }
 
-
     [HttpDelete("{id}")]
     public async Task<Result<BookDto>> DeleteBookAuthor(int id)
     {
