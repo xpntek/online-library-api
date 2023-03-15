@@ -178,6 +178,23 @@ namespace Persistence.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("Domain.Departament", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Departaments");
+                });
+
             modelBuilder.Entity("Domain.Employee", b =>
                 {
                     b.Property<int>("Id")
@@ -186,9 +203,8 @@ namespace Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Department")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("DepartamentId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("EmployeeCode")
                         .HasColumnType("integer");
@@ -212,6 +228,8 @@ namespace Persistence.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartamentId");
 
                     b.HasIndex("UserId");
 
@@ -758,6 +776,12 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Employee", b =>
                 {
+                    b.HasOne("Domain.Departament", "Departament")
+                        .WithMany()
+                        .HasForeignKey("DepartamentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -765,6 +789,8 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("Departament");
                 });
 
             modelBuilder.Entity("Domain.Favorite", b =>

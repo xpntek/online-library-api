@@ -1,4 +1,5 @@
-﻿using Application.Dtos;
+﻿using API.Serialization;
+using Application.Dtos;
 using Application.Features.Books;
 using FluentResults;
 using MediatR;
@@ -16,34 +17,39 @@ public class BooksController : BaseApiController
     }
 
     [HttpPost]
-    public async Task<Result<BookDto>> SaveBookAuthor(CreateBookAuthor.CreateBookCommand command)
+    public async Task<IActionResult> SaveBookAuthor(CreateBookAuthor.CreateBookCommand command)
     {
-        return await _mediator.Send(command);
+        var result = await _mediator.Send(command);
+        return this.SerializeResult(result);
     }
 
     [HttpGet]
-    public async Task<Result<List<BookDto>>> ListBookAuthor()
+    public async Task<IActionResult> ListBookAuthor()
     {
-        return await _mediator.Send(new ListBooksAuthors.ListBooksAuthorsQuery());
+        var result = await _mediator.Send(new ListBooksAuthors.ListBooksAuthorsQuery());
+        return this.SerializeResult(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<Result<BookDto>> ListBookAuthor(int id)
+    public async Task<IActionResult> ListBookAuthor(int id)
     {
-        return await _mediator.Send(new ListBookById.ListBookByIdQuery { Id = id });
+        var result = await _mediator.Send(new ListBookById.ListBookByIdQuery { Id = id });
+        return this.SerializeResult(result);
     }
 
     [HttpPut("{id}")]
-    public async Task<Result<BookDto>> UpdateBookAuthor(int id, UpdateBookAuthor.UpdateBookAuthorCommand command)
+    public async Task<IActionResult> UpdateBookAuthor(int id, UpdateBookAuthor.UpdateBookAuthorCommand command)
     {
         command.Id = id;
-        return await _mediator.Send(command);
+        var result = await _mediator.Send(command);
+        return this.SerializeResult(result);
     }
 
 
     [HttpDelete("{id}")]
-    public async Task<Result<BookDto>> DeleteBookAuthor(int id)
+    public async Task<IActionResult> DeleteBookAuthor(int id)
     {
-        return await _mediator.Send(new DeleteBookAuthors.DeleteBookAuthorsCommand { Id = id });
+        var result = await _mediator.Send(new DeleteBookAuthors.DeleteBookAuthorsCommand { Id = id });
+        return this.SerializeResult(result);
     }
 }

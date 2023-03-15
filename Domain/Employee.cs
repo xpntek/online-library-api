@@ -8,10 +8,12 @@ public class Employee:BaseEntity
     public string Function { get; set; }
     public float Salary { get; set; }
     public DateTimeOffset HiringDate  { get; set; }
-    public string Status  { get; set; }
-    public string Department  { get; set; }
+    public string Status { get; set; }
     public string UserId { get; set; }
     [ForeignKey("UserId")] 
     public ApplicationUser? ApplicationUser { get; set; }
+    public int DepartamentId { get; set; }
+    [ForeignKey("DepartamentId")] 
+    public Departament? Departament { get; set; }
     
 }

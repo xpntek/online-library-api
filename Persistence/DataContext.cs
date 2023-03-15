@@ -28,6 +28,7 @@ public class DataContext: IdentityDbContext
     public DbSet<Supplier> Suppliers { get; set; }
     public DbSet<Author> Authors { get; set; }
     public DbSet<BookAuthor> BookAuthors { get; set; }
+    public DbSet<Departament> Departaments {get;set;}
     
 
 }
