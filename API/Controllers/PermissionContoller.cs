@@ -40,4 +40,10 @@ public class PermissionContoller : BaseApiController
 
         return await _mediator.Send(command);
     }
+
+    [HttpGet("{id}")]
+    public async Task<Result<Permission>> GetPermissionById(int id)
+    {
+        return await _mediator.Send(new GetPermissionById.GetPermissionByIdQery { Id = id });
+    }
 }

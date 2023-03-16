@@ -1,4 +1,5 @@
-﻿using Application.Dtos;
+﻿using API.Serialization;
+using Application.Dtos;
 using Application.Features.Authors;
 using Domain;
 using FluentResults;
@@ -24,9 +25,10 @@ public class AuthorsController : BaseApiController
     }
     
     [HttpGet]
-    public async Task<Result<List<AuthorDto>>> ListAuthors()
+    public async Task<IActionResult> ListAuthors()
     {
-        return await _mediator.Send( new ListAllAuthors.ListAllAuthorsQuery());
+        var result =  await _mediator.Send( new ListAllAuthors.ListAllAuthorsQuery());
+        return this.SerializeResult(result);
     }
     
     [HttpGet("{id}")]
