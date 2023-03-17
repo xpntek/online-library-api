@@ -26,4 +26,23 @@ public class RolesController : BaseApiController
     {
         return await _mediator.Send(new ListRoles.ListRolesQuery());
     }
+
+    [HttpDelete("{roleId}")]
+    public async Task<Result<IdentityRole>> DeleteRole(string roleId)
+    {
+        return await _mediator.Send(new DeleteRole.DeleteRoleCommand {RoleId = roleId});
+    }
+    
+    [HttpGet("{roleId}")]
+    public async Task<Result<IdentityRole>> GetRoleById(string roleId)
+    {
+        return await _mediator.Send(new GetRoleById.GetRoleByIdQuery {RoleId = roleId});
+    }
+
+    [HttpPut("{roleId}")]
+    public async Task<Result<IdentityRole>> UpdateRole(string roleId, UpdateRole.UpdateRoleCommand command)
+    {
+        command.RoleId = roleId;
+        return await _mediator.Send(command);
+    }
 }
