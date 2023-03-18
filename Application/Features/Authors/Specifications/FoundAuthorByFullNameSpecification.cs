@@ -5,7 +5,8 @@ namespace Application.Features.Authors.AuthorSpecification;
 
 public class FoundAuthorByFullNameSpecification : BaseSpecification<Author>
 {
-    public FoundAuthorByFullNameSpecification(string fullName) : base(author => author.FullName == fullName)
+    public FoundAuthorByFullNameSpecification(string fullName) : base(author => author.FullName == fullName.ToLower())
     {
+        
     }
 }

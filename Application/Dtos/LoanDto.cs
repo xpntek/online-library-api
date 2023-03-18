@@ -2,6 +2,7 @@
 
 public class LoanDto
 {
+    public int Id { get; set; }
     public DateTimeOffset LoanDate { get; set; }
     public DateTimeOffset ReturnDate { get; set; }
     public DateTimeOffset EffectiveReturnDate { get; set; }

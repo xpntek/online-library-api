@@ -60,7 +60,7 @@ public class UpdateBookAuthor
             var listOfAuthorsModel = request.Authors;
             if (listOfAuthorsModel.Count == 0)
             {
-                return Results.InternalError("The book don't have author");
+                return Results.NotFoundError("The book don't have author");
             }
 
             var listOfAuthorsToValidateId = listOfAuthorsModel.Select(x => x.Id).ToList();
@@ -112,20 +112,19 @@ public class UpdateBookAuthor
                 {
                     CategoryId = category.Id,
                     Category = book.Category.Description,
-                    Edition = request.Edition,
-                    Price = request.Price,
-                    Rating = request.Rating,
-                    Synopsis = request.Synopsis,
-                    Title = request.Title,
-                    BookAmount = request.BookAmount,
-                    CoverUrl = request.CoverUrl,
-                    PagesNumbers = request.PagesNumbers,
-                    PublishingCompany = request.PublishingCompany,
-                    PublishingYear = request.PublishingYear,
-                    ISBN = request.ISBN
+                    Edition = book.Edition,
+                    Price = book.Price,
+                    Rating = book.Rating,
+                    Synopsis = book.Synopsis,
+                    Title = book.Title,
+                    BookAmount = book.BookAmount,
+                    CoverUrl = book.CoverUrl,
+                    PagesNumbers = book.PagesNumbers,
+                    PublishingCompany = book.PublishingCompany,
+                    PublishingYear = book.PublishingYear,
+                    ISBN = book.ISBN
                 };
                 
-                var bookAuthorsList = new List<BookAuthor>();
                 foreach (var author in listOfAuthorsModel)
                 {
                     var bookAuthors = new BookAuthor()
@@ -133,7 +132,6 @@ public class UpdateBookAuthor
                         AuthorId = author.Id,
                         BookId = book.Id,
                     };
-                    bookAuthorsList.Add(bookAuthors);
                     _unitOfWork.Repository<BookAuthor>().Add(bookAuthors);
                     bookAuthDto.Authors.Add(author.FullName);
                 }

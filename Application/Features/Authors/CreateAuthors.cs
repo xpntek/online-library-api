@@ -12,7 +12,7 @@ namespace Application.Features.Authors;
 
 public class CreateAuthors
 {
-    public class CreateAuthorsCommand : IRequest<Result<AuthorDto>>
+    public class CreateAuthorCommand : IRequest<Result<AuthorDto>>
     {
         public string FullName { get; set; }
         public string Nationality { get; set; }
@@ -20,20 +20,18 @@ public class CreateAuthors
         public string Biography { get; set; }
     }
 
-    public class CreateAuthorsCommandHandler : IRequestHandler<CreateAuthorsCommand, Result<AuthorDto>>
+    public class CreateAuthorCommandHandler : IRequestHandler<CreateAuthorCommand, Result<AuthorDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly DataContext _context;
 
-        public CreateAuthorsCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, DataContext context)
+        public CreateAuthorCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _context = context;
         }
 
-        public async Task<Result<AuthorDto>> Handle(CreateAuthorsCommand request, CancellationToken cancellationToken)
+        public async Task<Result<AuthorDto>> Handle(CreateAuthorCommand request, CancellationToken cancellationToken)
         {
             var authorSpec = new FoundAuthorByFullNameSpecification(request.FullName);
             var authorObject = await  _unitOfWork.Repository<Author>().GetEntityWithSpec(authorSpec);
@@ -45,7 +43,7 @@ public class CreateAuthors
             
             var author = new Author()
             {
-                FullName = request.FullName,
+                FullName = request.FullName.ToLower(),
                 Biography = request.Biography,
                 Gender = request.Gender,
                 Nationality = request.Nationality

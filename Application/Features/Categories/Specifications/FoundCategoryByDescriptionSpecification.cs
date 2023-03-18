@@ -5,7 +5,7 @@ namespace Application.Features.Categories.Specification;
 
 public class FoundCategoryByDescriptionSpecification : BaseSpecification<Category>
 {
-    public FoundCategoryByDescriptionSpecification( string description) : base(category =>category.Description== description )
+    public FoundCategoryByDescriptionSpecification( string description) : base(category =>category.Description== description.ToLower() )
     {
         
     }

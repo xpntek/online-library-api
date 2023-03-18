@@ -1,4 +1,5 @@
-﻿using Application.Dtos;
+﻿using API.Serialization;
+using Application.Dtos;
 using Application.Features.Books;
 using Application.Features.Categories;
 using Domain;
@@ -18,40 +19,46 @@ public class CategoriesController : BaseApiController
     }
 
     [HttpPost]
-    public Task<Result<CategoryDto>> SaveCategory(CreateCategory.CreateCategoryCommand command)
+    public async Task<IActionResult> SaveCategory(CreateCategory.CreateCategoryCommand command)
     {
-        return _mediator.Send(command);
+        var result = await _mediator.Send(command);
+        return this.SerializeResult(result);
     }
     
     [HttpGet]
-    public Task<Result<List<CategoryDto>>> ListCategory()
+    public async Task<IActionResult> ListCategory()
     {
-        return _mediator.Send(new ListCategory.ListCategoryQuery());
+        var result = await _mediator.Send(new ListCategory.ListCategoryQuery());
+        return this.SerializeResult(result);
     }
     
     [HttpGet("{id}")]
-    public Task<Result<CategoryDto>> GetCategoryById(int id)
+    public async Task<IActionResult> GetCategoryById(int id)
     {
-        return _mediator.Send(new ListCategoryById.ListCategoryByIdQuery{Id = id});
+        var result = await _mediator.Send(new ListCategoryById.GetCategoryByIdQuery{Id = id});
+        return this.SerializeResult(result);
     }
     
     [HttpGet("description/{description}")]
-    public Task<Result<CategoryDto>> GetCategoryByDescription(string description)
+    public async Task<IActionResult> GetCategoryByDescription(string description)
     {
-        return _mediator.Send(new ListCategoryByDescription.ListCategoryByDescriptionQuery{Description = description});
+        var result = await _mediator.Send(new ListCategoryByDescription.ListCategoryByDescriptionQuery{Description = description});
+        return this.SerializeResult(result);
     }
     
     [HttpPut("{id}")]
-    public Task<Result<CategoryDto>> UpdateCategory(int id, UpdateCategory.UpdateCategoryCommand command)
+    public async Task<IActionResult> UpdateCategory(int id, UpdateCategory.UpdateCategoryCommand command)
     {
         command.Id = id;
-        return _mediator.Send(command);
+        var result =await _mediator.Send(command);
+        return this.SerializeResult(result);
     }
     
     [HttpDelete("{id}")]
-    public Task<Result<CategoryDto>> DeleteCategory(int id)
+    public async Task<IActionResult> DeleteCategory(int id)
     {
-        return _mediator.Send(new DeleteCategory.DeleteCategoryCommand{Id =id });
+        var result = await _mediator.Send(new DeleteCategory.DeleteCategoryCommand{Id =id });
+        return this.SerializeResult(result);
     }
     
     

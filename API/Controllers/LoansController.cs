@@ -1,4 +1,5 @@
-﻿using Application.Dtos;
+﻿using API.Serialization;
+using Application.Dtos;
 using Application.Features.Loans;
 using FluentResults;
 using MediatR;
@@ -16,34 +17,39 @@ public class LoansController : BaseApiController
     }
 
     [HttpPost]
-    public async Task<Result<LoanDto>> SaveLoan(CreateLoan.CreateLoanCommand command)
+    public async Task<IActionResult> SaveLoan(CreateLoan.CreateLoanCommand command)
     {
-        return await _mediator.Send(command);
+        var result = await _mediator.Send(command);
+        return this.SerializeResult(result);
     }
     
     [HttpGet]
-    public async Task<Result<List<LoanDto>>> ListLoan()
+    public async Task<IActionResult> ListLoan()
     {
-        return await _mediator.Send(new ListLoan.ListLoanQuery());
+        var result =  await _mediator.Send(new ListLoan.ListLoanQuery());
+        return this.SerializeResult(result);
     }
     
     [HttpGet("{id}")]
-    public async Task<Result<LoanDto>> GetLoanById(int id)
+    public async Task<IActionResult> GetLoanById(int id)
     {
-        return await _mediator.Send(new GetLoanById.GetLoanByIdQuery{Id = id});
+        var result =  await _mediator.Send(new GetLoanById.GetLoanByIdQuery{Id = id});
+        return this.SerializeResult(result);
     }
     
     [HttpPut("{id}")]
-    public async Task<Result<LoanDto>> UpdateLoan(int id, UpdateLoan.UpdateLoanCommand command)
+    public async Task<IActionResult> UpdateLoan(int id, UpdateLoan.UpdateLoanCommand command)
     {
         command.Id=id;
-        return await _mediator.Send(command);
+        var result =  await _mediator.Send(command);
+        return this.SerializeResult(result);
     }
     
     [HttpDelete("{id}")]
-    public async Task<Result<LoanDto>> DeleteLoan(int id)
+    public async Task<IActionResult> DeleteLoan(int id)
     {
-        return await _mediator.Send(new DeleteLoan.DeleteLoanCommand{Id = id});
+        var result =  await _mediator.Send(new DeleteLoan.DeleteLoanCommand{Id = id});
+        return this.SerializeResult(result);
     }
 
 }

@@ -6,6 +6,6 @@ public class Favorite:BaseEntity
 {
     public int BookId { get; set; }
     [ForeignKey("BooKId")] public Book? Book { get; set; }
-    public string UserId { get; set; }
-    [ForeignKey("UserId")] public ApplicationUser? User { get; set; }
+    public int ClientId { get; set; }
+    [ForeignKey("ClientId")] public Client? Client { get; set; }
 }

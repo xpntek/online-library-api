@@ -1,4 +1,5 @@
-﻿using Application.Dtos;
+﻿using API.Serialization;
+using Application.Dtos;
 using Application.Features.Favorites;
 using Domain;
 using FluentResults;
@@ -17,20 +18,23 @@ public class FavoriteController : BaseApiController
     }
 
     [HttpPost]
-    public async Task<Result<FavoriteDto>> SaveFavorite(CreateFavorite.CreateFavoriteCommand command)
+    public async Task<IActionResult> SaveFavorite(CreateFavorite.CreateFavoriteCommand command)
     {
-        return await _mediator.Send(command);
+        var result = await _mediator.Send(command);
+        return this.SerializeResult(result);
     }
     
     [HttpGet]
-    public async Task<Result<List<BookDto>>> ListFavorite()
+    public async Task<IActionResult> ListFavorite()
     {
-        return await _mediator.Send(new ListFavorite.ListFavoriteQuery());
+        var result = await _mediator.Send(new ListFavorite.ListFavoriteQuery());
+        return this.SerializeResult(result);
     }
     
     [HttpDelete("{id}")]
-    public async Task<Result<Favorite>> DeleteFavorite(int id)
+    public async Task<IActionResult> DeleteFavorite(int id)
     {
-        return await _mediator.Send(new DeleteFavorite.DeleteFavoriteCommand{Id = id});
+        var result = await _mediator.Send(new DeleteFavorite.DeleteFavoriteCommand{Id = id});
+        return this.SerializeResult(result);
     }
 }

@@ -36,35 +36,38 @@ public class DeleteBookAuthors
             try
             {
                 var bookObject = await _unitOfWork.Repository<Book>().GetByIdAsync(request.Id);
-                var bookSpec = new FoundBookByISBNSpecification(bookObject.ISBN);
-                var bookAuthor = await _unitOfWork.Repository<BookAuthor>().GetEntityWithSpec(bookSpec);
+                var bookSpec = new FoundBookAuthorByBookIdSpecification(bookObject.Id);
+                var bookAuthorList = await _unitOfWork.Repository<BookAuthor>().ListWithSpecAsync(bookSpec);
+
+                foreach (var bookAuthor in bookAuthorList)
+                {
+                    _unitOfWork.Repository<BookAuthor>().Delete(bookAuthor);
+                }
                 
                 var bookAuthDto = new BookDto()
                 {
-                    CategoryId = bookAuthor.Book.CategoryId,
-                    Category = bookAuthor.Book.Category.Description,
-                    Edition = bookAuthor.Book.Edition,
-                    Price = bookAuthor.Book.Price,
-                    Rating = bookAuthor.Book.Rating,
-                    Synopsis = bookAuthor.Book.Synopsis,
-                    Title = bookAuthor.Book.Title,
-                    BookAmount = bookAuthor.Book.BookAmount,
-                    CoverUrl = bookAuthor.Book.CoverUrl,
-                    PagesNumbers = bookAuthor.Book.PagesNumbers,
-                    PublishingCompany = bookAuthor.Book.PublishingCompany,
-                    PublishingYear = bookAuthor.Book.PublishingYear,
-                    ISBN = bookAuthor.Book.ISBN
+                    CategoryId =bookObject.CategoryId,
+                    Category = bookObject.Category.Description,
+                    Edition = bookObject.Edition,
+                    Price =bookObject.Price,
+                    Rating =bookObject.Rating,
+                    Synopsis = bookObject.Synopsis,
+                    Title =bookObject.Title,
+                    BookAmount = bookObject.BookAmount,
+                    CoverUrl = bookObject.CoverUrl,
+                    PagesNumbers =bookObject.PagesNumbers,
+                    PublishingCompany = bookObject.PublishingCompany,
+                    PublishingYear = bookObject.PublishingYear,
+                    ISBN = bookObject.ISBN
                 };
-
-                _unitOfWork.Repository<BookAuthor>().Delete(bookAuthor);
+                
                 _unitOfWork.Repository<Book>().Delete(bookObject);
                 var result = await _unitOfWork.Complete();
                 if (result < 0)
                 {
                     return Results.InternalError("Fail to delete book");
                 }
-
-
+                
                 await transactionScope.CommitAsync(cancellationToken);
                 return bookAuthDto;
             }

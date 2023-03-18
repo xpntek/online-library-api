@@ -45,7 +45,7 @@ public class CreateFavorite
 
             var clientSpec = new FoundClientByIdSpecification(_userAccessor.GetCurrentUserID());
             var client = await _unitOfWork.Repository<Client>().GetEntityWithSpec(clientSpec);
-            if (client is  null)
+            if (client is null)
             {
                 return Results.NotFoundError(" User with Id:" + _userAccessor.GetCurrentUserID());
             }
@@ -53,7 +53,7 @@ public class CreateFavorite
             var newFavorite = new Favorite()
             {
                 BookId = request.BookId,
-                UserId = _userAccessor.GetCurrentUserID()
+                ClientId = client.Id
             };
             
             _unitOfWork.Repository<Favorite>().Add(newFavorite);

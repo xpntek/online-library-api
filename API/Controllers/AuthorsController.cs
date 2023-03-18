@@ -1,4 +1,5 @@
-﻿using Application.Dtos;
+﻿using API.Serialization;
+using Application.Dtos;
 using Application.Features.Authors;
 using Domain;
 using FluentResults;
@@ -18,42 +19,47 @@ public class AuthorsController : BaseApiController
     }
     
     [HttpPost]
-    public async Task<Result<AuthorDto>> SaveAuthors( CreateAuthors.CreateAuthorsCommand command)
+    public async Task<IActionResult> SaveAuthors( CreateAuthors.CreateAuthorCommand command)
     {
-        return await _mediator.Send(command);
+        var result = await _mediator.Send(command);
+        return this.SerializeResult(result);
     }
     
     [HttpGet]
-    public async Task<Result<List<AuthorDto>>> ListAuthors()
+    public async Task<IActionResult>  ListAuthors()
     {
-        return await _mediator.Send( new ListAllAuthors.ListAllAuthorsQuery());
+        var result = await _mediator.Send( new ListAllAuthors.ListAllAuthorsQuery());
+        return this.SerializeResult(result);
+     
     }
     
     [HttpGet("{id}")]
-    public async Task<Result<AuthorDto>> GetAuthorsById( int id)
+    public async Task<IActionResult> GetAuthorsById( int id)
     {
-        return await _mediator.Send(new ListAuthorById.ListAuthorByIdQuery{Id = id});
+        var result = await _mediator.Send(new ListAuthorById.ListAuthorByIdQuery{Id = id});
+        return this.SerializeResult(result);
     }
 
     [HttpGet("fullname/{fullname}")]
-    public async Task<Result<AuthorDto>> GetAuthorsByFullName( string fullname)
+    public async Task<IActionResult>  GetAuthorsByFullName( string fullname)
     {
-        return await _mediator.Send(new GetAuthorByFullName.GetAuthorByFullNameQuery{FullName = fullname});
+        var result =await _mediator.Send(new GetAuthorByFullName.GetAuthorByFullNameQuery{FullName = fullname});
+        return this.SerializeResult(result);
     }
     
-    
-
     [HttpDelete("{id}")]
-    public async Task<Result<AuthorDto>> DeleteAuthor(int id)
+    public async Task<IActionResult>  DeleteAuthor(int id)
     {
-        return await _mediator.Send(new DeleteAuthor.DeleteAuthorCommand { Id = id });
+        var result = await _mediator.Send(new DeleteAuthor.DeleteAuthorCommand { Id = id });
+        return this.SerializeResult(result);
     }
     
     [HttpPut("{id}")]
-    public async Task<Result<AuthorDto>> UpdateAuthors(int id, UpdateAuthor.UpdateAuthorCommand command)
+    public async Task<IActionResult>  UpdateAuthors(int id, UpdateAuthor.UpdateAuthorCommand command)
     {
         command.Id = id;
-        return await _mediator.Send(command);
+        var result = await _mediator.Send(command);
+        return this.SerializeResult(result);
     }
 
     

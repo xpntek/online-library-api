@@ -9,25 +9,25 @@ using MediatR;
 
 namespace Application.Features.Books;
 
-public class ListBookById
+public class GetBookById
 {
-    public class ListBookByIdQuery : IRequest<Result<BookDto>>
+    public class GetBookByIdQuery : IRequest<Result<BookDto>>
     {
         public int Id { get; set; }
     }
-    public class ListBookByIdQueryHandler : IRequestHandler<ListBookByIdQuery,Result<BookDto>>
+    public class GetBookByIdQueryHandler : IRequestHandler<GetBookByIdQuery,Result<BookDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IListOfAuthorsService _listOfAuthorsService;
 
-        public ListBookByIdQueryHandler(IUnitOfWork unitOfWork,IMapper mapper, IListOfAuthorsService listOfAuthorsService)
+        public GetBookByIdQueryHandler(IUnitOfWork unitOfWork,IMapper mapper, IListOfAuthorsService listOfAuthorsService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _listOfAuthorsService = listOfAuthorsService;
         }
-        public async Task<Result<BookDto>> Handle(ListBookByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<BookDto>> Handle(GetBookByIdQuery request, CancellationToken cancellationToken)
         {
 
             var bookObject = await _unitOfWork.Repository<Book>().GetByIdAsync(request.Id);

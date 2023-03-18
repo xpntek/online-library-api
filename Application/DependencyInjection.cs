@@ -16,11 +16,11 @@ public static class DependencyInjection
         services.AddControllers()
             .AddFluentValidation(s =>
             {
-                s.RegisterValidatorsFromAssemblyContaining<ListBooksAuthors.ListBooksAuthorsQuery>();
+                s.RegisterValidatorsFromAssemblyContaining<ListBookAuthor.ListBookAuthorQuery>();
                 s.DisableDataAnnotationsValidation = true;
             });
         
-        services.AddMediatR(typeof(ListBooksAuthors.ListBooksAuthorsQuery).Assembly);
+        services.AddMediatR(typeof(ListBookAuthor.ListBookAuthorQuery).Assembly);
         
         return services;
     }
