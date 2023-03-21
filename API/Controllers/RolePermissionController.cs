@@ -20,4 +20,16 @@ public class RolePermissionController : BaseApiController
     {
         return await _mediator.Send(command);
     }
+
+    [HttpGet("{rolePermissionId}")]
+    public async Task<Result<RolePermission>> GetRolePermissionById(int rolePermissionId)
+    {
+        return await _mediator.Send(new GetRolePermissionById.GetRolePermissionByIdQuery {Id = rolePermissionId});
+    }
+    
+    [HttpGet]
+    public async Task<Result<List<RolePermission>>> ListRolePermission()
+    {
+        return await _mediator.Send(new ListRolePermissions.ListRolePermissionQuery());
+    }
 }
