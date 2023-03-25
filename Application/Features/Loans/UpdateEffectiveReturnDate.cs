@@ -1,6 +1,5 @@
 ﻿using Application.Dtos;
 using Application.Errors;
-using Application.Features.Loans.Specification;
 using Application.Interfaces;
 using AutoMapper;
 using Domain;
@@ -9,38 +8,33 @@ using MediatR;
 
 namespace Application.Features.Loans;
 
-public class UpdateLoan
+public class UpdateEffectiveReturnDate
 {
-    public class UpdateLoanCommand : IRequest<Result<LoanDto>>
+    public class UpdateEffectiveReturnDateCommand : IRequest<Result<LoanDto>>
     {
         public int Id { get; set; }
-        public string status { get; set; }
-        public float Forfeit { get; set; }
         public DateTimeOffset? EffectiveReturnDate { get; set; }
     }
 
-    public class UpdateLoanCommandHandler : IRequestHandler<UpdateLoanCommand, Result<LoanDto>>
+    public class UpdateEffectiveReturnDateCommandHandler : IRequestHandler<UpdateEffectiveReturnDateCommand, Result<LoanDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public UpdateLoanCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public UpdateEffectiveReturnDateCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        public async Task<Result<LoanDto>> Handle(UpdateLoanCommand request, CancellationToken cancellationToken)
+        public async Task<Result<LoanDto>> Handle(UpdateEffectiveReturnDateCommand request, CancellationToken cancellationToken)
         {
-            var loanSpec = new GetLoanByIdSpecification(request.Id);
-            var loan = await _unitOfWork.Repository<Loan>().GetEntityWithSpec(loanSpec);
+            var loan = await _unitOfWork.Repository<Loan>().GetByIdAsync(request.Id);
             if (loan is null)
             {
                 return Results.NotFoundError("Id:" + request.Id);
             }
-
-            loan.Status = request.status;
-            loan.Forfeit = request.Forfeit;
+            
             loan.EffectiveReturnDate = request.EffectiveReturnDate;
             
             _unitOfWork.Repository<Loan>().Update(loan);

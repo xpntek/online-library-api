@@ -43,6 +43,14 @@ public class LoansController : BaseApiController
         command.Id=id;
         var result =  await _mediator.Send(command);
         return this.SerializeResult(result);
+    } 
+    
+    [HttpPut("EffectiveReturnDate/{id}")]
+    public async Task<IActionResult> UpdateEffectiveReturnDate(int id, UpdateEffectiveReturnDate.UpdateEffectiveReturnDateCommand command)
+    {
+        command.Id=id;
+        var result =  await _mediator.Send(command);
+        return this.SerializeResult(result);
     }
     
     [HttpDelete("{id}")]

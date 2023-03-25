@@ -27,7 +27,6 @@ public class DbInitializer : IDbInitializer
         try
         {
             if (_context.Database.GetPendingMigrations().Count() > 0) _context.Database.Migrate();
-            
         }
         catch (Exception e)
         {
@@ -37,19 +36,22 @@ public class DbInitializer : IDbInitializer
 
         if (!_context.Categories.Any())
         {
-            _context.Categories.Add(new Category { Description = "Romance" });
-            _context.Categories.Add(new Category { Description = "Drama" });
-            _context.Categories.Add(new Category { Description = "Novela" });
-            _context.Categories.Add(new Category { Description = "Conto" });
-            _context.Categories.Add(new Category { Description = "Crônica" });
-            _context.Categories.Add(new Category { Description = "Ensaio" });
-            _context.Categories.Add(new Category { Description = "Poesia" });
-            _context.Categories.Add(new Category { Description = "Carta" });
-            _context.Categories.Add(new Category { Description = "Aventura" });
-            _context.Categories.Add(new Category { Description = "Biografia" });
-            _context.Categories.Add(new Category { Description = "Terror" });
-            _context.Categories.Add(new Category { Description = "Acadêmico" });
-            _context.Categories.Add(new Category { Description = "Comedia" });
+            _context.Categories.AddRange(new List<Category>
+            {
+                new Category { Description = "Romance" },
+                new Category { Description = "Drama" },
+                new Category { Description = "Novela" },
+                new Category { Description = "Conto" },
+                new Category { Description = "Crônica" },
+                new Category { Description = "Ensaio" },
+                new Category { Description = "Poesia" },
+                new Category { Description = "Carta" },
+                new Category { Description = "Aventura" },
+                new Category { Description = "Biografia" },
+                new Category { Description = "Terror" },
+                new Category { Description = "Acadêmico" },
+                new Category { Description = "Comédia" }
+            });
             _context.SaveChanges();
         }
 
@@ -72,6 +74,5 @@ public class DbInitializer : IDbInitializer
 
             _userManager.AddToRoleAsync(user, SD.ADMIN_ROLE).GetAwaiter().GetResult();
         }
-        
     }
 }

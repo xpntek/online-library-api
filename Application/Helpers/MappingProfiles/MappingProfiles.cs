@@ -13,7 +13,8 @@ public class MappingProfiles : Profile
         CreateMap<Book,BookDto>();
         CreateMap<Category,CategoryDto>();
         CreateMap<Favorite,FavoriteDto>();
-        
+        CreateMap<Loan,LoanDto>();
+
     }
     
 }

@@ -28,7 +28,7 @@ public class GetLoanById
         }
         public async Task<Result<LoanDto>> Handle(GetLoanByIdQuery request, CancellationToken cancellationToken)
         {
-            var loanSpec = new FoundLoanByIdSpecification(request.Id);
+            var loanSpec = new GetLoanByIdSpecification(request.Id);
             var loan = await _unitOfWork.Repository<Loan>().GetEntityWithSpec(loanSpec);
             
             if (loan is null)
