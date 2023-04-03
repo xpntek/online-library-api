@@ -42,17 +42,7 @@ namespace Application.Features.Reserves
             }
             public async Task<Result<ReserveDto>> Handle(UpdateReserveCommand request, CancellationToken cancellationToken)
             {
-                var user = await _userManager.FindByIdAsync(request.UserId);
-                if (user is null)
-                {
-                    Results.NotFoundError("User doesnt exist");
-                }
-
-                var book = _unitOfWork.Repository<Book>().GetByIdAsync(request.BookId);
-                if (book is null)
-                {
-                    Results.NotFoundError("Book doesnt exist");
-                }
+               
                 var reserveSpec = new GetRserveByIdSpecification(request.Id);
                 var check = await _unitOfWork.Repository<Reserve>().GetEntityWithSpec(reserveSpec);
                 if (check is null)
@@ -60,6 +50,21 @@ namespace Application.Features.Reserves
                     return Results.ConflictError(""+request.Id);
                 
                 }
+
+                var user = await _userManager.FindByIdAsync(request.UserId);
+                if (user is null)
+                {
+                    return  Results.NotFoundError(""+request.UserId);
+                    
+                }
+
+                var book = await _unitOfWork.Repository<Book>().GetByIdAsync(request.BookId);
+
+                if (book is null)
+                {
+                    return  Results.NotFoundError(""+request.BookId);
+                }
+                
 
                 check.BookingDate = request.BookingDate;
                 check.EndDate = request.EndDate;
